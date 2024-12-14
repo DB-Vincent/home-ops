@@ -1,0 +1,26 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: "3"
+vars:
+  KUBERNETES_APPS_DIR: "{{.ROOT_DIR}}/apps"
+  KUBERNETES_DIR: "{{.ROOT_DIR}}/cluster"
+  KUBECONFIG_FILE: "{{.ROOT_DIR}}/kubeconfig"
+  AGE_DIR: ~/.config/sops/age
+  AGE_FILE: "{{.AGE_DIR}}/keys.txt"
+  SOPS_CONFIG_FILE: "{{.ROOT_DIR}}/.sops.yaml"
+env:
+  KUBECONFIG: "{{.KUBECONFIG_FILE}}"
+includes:
+  talos: .taskfiles/talos.yaml
+  sops: .taskfiles/sops.yaml
+  setup: .taskfiles/setup.yaml
+  flux: .taskfiles/flux.yaml
+tasks:
+  default:
+    desc: Run the default task
+    cmds:
+      - echo "Welcome to the Taskfile setup!"
+  init:
+    desc: Install dependencies and setup environment
+    cmds:
+      - task: setup:init
+      - task: sops:setup

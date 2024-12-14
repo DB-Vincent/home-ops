@@ -1,0 +1,59 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: "3"
+vars:
+  TALOS_DIR: "{{.ROOT_DIR}}/cluster/bootstrap/talos"
+  CONFIG_DIR: "{{.TALOS_DIR}}/configs"
+  TALHELPER_CONFIG_FILE: "{{.CONFIG_DIR}}/talconfig.yaml"
+  SECRET_FILE: "{{.CONFIG_DIR}}/talsecret.sops.yaml"
+  CLUSTERCONFIG_DIR: "{{.TALOS_DIR}}/clusterconfigs"
+  TALOSCONFIG_FILE: "{{.CLUSTERCONFIG_DIR}}/talosconfig"
+env:
+  TALOSCONFIG: "{{.TALOSCONFIG}}"
+tasks:
+  bootstrap:
+    desc: Bootstrap the Talos cluster
+    cmds:
+      - task: generate
+      - task: apply
+      - until talhelper gencommand bootstrap --config-file {{.TALHELPER_CONFIG_FILE}} --out-dir {{.CLUSTERCONFIG_DIR}} | bash; do sleep 10; done
+      - task: fetch-kubeconfig
+    preconditions:
+      - msg: "Talos config directory does not exist"
+        sh: test -d {{.CONFIG_DIR}}
+  generate:
+    desc: Generate Talos configs
+    cmds:
+      - |
+        if [ ! -f "{{.SECRET_FILE}}" ]; then
+          talhelper gensecret > {{.SECRET_FILE}}
+          sops --encrypt --in-place {{.SECRET_FILE}}
+        fi
+      - talhelper genconfig --config-file {{.TALHELPER_CONFIG_FILE}} --out-dir {{.CLUSTERCONFIG_DIR}} --secret-file {{.SECRET_FILE}}
+  apply:
+    desc: Apply Talos node configs
+    cmds:
+      - talhelper gencommand apply --config-file {{.TALHELPER_CONFIG_FILE}} --out-dir {{.CLUSTERCONFIG_DIR}} --extra-flags="--insecure" | bash
+      #    preconditions:
+      #      - msg: Missing talhelper config file
+      #        sh: test -f {{.TALHELPER_CONFIG_FILE}}
+  fetch-kubeconfig:
+    desc: Fetch kubeconfig from the cluster
+    cmds:
+      - until talhelper gencommand kubeconfig --config-file {{.TALHELPER_CONFIG_FILE}} --out-dir {{.CLUSTERCONFIG_DIR}} --extra-flags="{{.ROOT_DIR}} --force" | bash; do sleep 10; done
+  upgrade-node:
+    desc: Upgrade a single Talos node
+    cmds:
+      - talosctl --nodes {{.node}} upgrade --image {{.image}}
+    vars:
+      node: ""
+      image: ""
+    requires:
+      vars: ["node", "image"]
+  upgrade-k8s:
+    desc: Upgrade Kubernetes cluster
+    cmds:
+      - talosctl upgrade-k8s --to {{.version}}
+    vars:
+      version: ""
+    requires:
+      vars: ["version"]

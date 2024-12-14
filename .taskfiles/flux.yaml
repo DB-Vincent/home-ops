@@ -1,0 +1,36 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: "3"
+tasks:
+  bootstrap:
+    desc: Bootstraps Flux into a Kubernetes cluster
+    summary: |
+      Args:
+        cluster: Cluster to run command against (required)
+    prompt: Bootstrap Flux into the '{{.cluster}}' cluster ... continue?
+    cmds:
+      - kubectl --context {{.cluster}} apply --kubeconfig {{.KUBECONFIG_FILE}} --server-side --kustomize {{.KUBERNETES_DIR}}/bootstrap/flux
+      - cat {{.AGE_FILE}} | kubectl -n flux-system create --kubeconfig {{.KUBECONFIG_FILE}} secret generic sops-age --from-file=age.agekey=/dev/stdin
+      - sops --decrypt {{.KUBERNETES_DIR}}/flux/vars/cluster-secrets.sops.yaml | kubectl apply --kubeconfig {{.KUBECONFIG_FILE}} --server-side --filename -
+      - kubectl --context {{.cluster}} apply --kubeconfig {{.KUBECONFIG_FILE}} --server-side --filename {{.KUBERNETES_DIR}}/flux/vars/cluster-settings.yaml
+      - kubectl --context {{.cluster}} apply --kubeconfig {{.KUBECONFIG_FILE}} --server-side --kustomize {{.KUBERNETES_DIR}}/flux/config
+      - task: github-deploy-key
+    requires:
+      vars: ["cluster"]
+    preconditions:
+      - msg: Missing kubeconfig
+        sh: test -f {{.KUBECONFIG_FILE}}
+      - msg: Missing Sops Age key file
+        sh: test -f {{.AGE_FILE}}
+  github-deploy-key:
+    cmds:
+      - kubectl --context {{.cluster}} create namespace flux-system --dry-run=client -o yaml | kubectl --context {{.cluster}} apply --filename -
+      - sops --decrypt {{.KUBERNETES_DIR}}/bootstrap/flux/github-deploy-key.sops.yaml | kubectl apply --context {{.cluster}} --server-side --filename -
+    requires:
+      vars: ["cluster"]
+    preconditions:
+      - msg: Missing kubeconfig
+        sh: test -f {{.KUBECONFIG_FILE}}
+      - msg: Missing Sops Age key file
+        sh: test -f {{.AGE_FILE}}
+      - msg: Missing Github deploy key file
+        sh: test -f {{.KUBERNETES_DIR}}/bootstrap/flux/github-deploy-key.sops.yaml

@@ -1,0 +1,31 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: "3"
+tasks:
+  init:
+    desc: "Install SOPS, Talhelper, and Age-Keygen"
+    cmds:
+      - |
+        # Install SOPS
+        if ! command -v sops &>/dev/null; then
+          echo "Installing SOPS..."
+          brew install sops || (curl -sSL https://github.com/mozilla/sops/releases/download/v3.7.3/sops-v3.7.3.linux.amd64 -o /usr/local/bin/sops && chmod +x /usr/local/bin/sops)
+        else
+          echo "SOPS is already installed."
+        fi
+      - |
+        # Install Talhelper
+        if ! command -v talhelper &>/dev/null; then
+          echo "Installing Talhelper..."
+          curl -sSL https://github.com/koenrh/talhelper/releases/download/v0.1.0/talhelper-linux-amd64 -o /usr/local/bin/talhelper && chmod +x /usr/local/bin/talhelper
+        else
+          echo "Talhelper is already installed."
+        fi
+      - |
+        # Install Age-Keygen
+        if ! command -v age-keygen &>/dev/null; then
+          echo "Installing Age-Keygen..."
+          brew install age || (curl -sSL https://github.com/FiloSottile/age/releases/download/v1.0.0/age-v1.0.0-linux-amd64.tar.gz | tar -xzvf - age && mv age /usr/local/bin/)
+        else
+          echo "Age-Keygen is already installed."
+        fi
+    silent: true
