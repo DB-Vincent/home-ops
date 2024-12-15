@@ -7,8 +7,7 @@ kubernetesVersion: v1.31.2
 clusterName: "homelab"
 # See also `cluster-settings.yaml for Kube API IP setting`
 endpoint: https://10.252.252.200:6443
-clusterPodNets: ["10.42.0.0/16"]
-clusterSvcNets: ["10.43.0.0/16"]
+clusterPodNets: ["10.244.0.0/16"]
 additionalApiServerCertSans: &sans
   - &kubeApiIP "10.252.252.200"
   - 127.0.0.1 # KubePrism
