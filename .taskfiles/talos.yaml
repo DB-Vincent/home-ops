@@ -43,17 +43,12 @@ tasks:
   upgrade-node:
     desc: Upgrade a single Talos node
     cmds:
-      - talosctl --nodes {{.node}} upgrade --image {{.image}}
-    vars:
-      node: ""
-      image: ""
+      - talosctl --nodes {{.node}} upgrade --image {{.image}} --talosconfig={{.TALOSCONFIG_FILE}}
     requires:
       vars: ["node", "image"]
   upgrade-k8s:
     desc: Upgrade Kubernetes cluster
     cmds:
-      - talosctl upgrade-k8s --to {{.version}}
-    vars:
-      version: ""
+      - talosctl upgrade-k8s --nodes {{.node}} --to {{.version}} --talosconfig={{.TALOSCONFIG_FILE}}
     requires:
-      vars: ["version"]
+      vars: ["node", "version"]

@@ -1,9 +1,9 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/master/pkg/config/schemas/talconfig.json
 # https://budimanjojo.github.io/talhelper/latest/reference/configuration
 # renovate: datasource=docker depName=ghcr.io/siderolabs/installer
-talosVersion: v1.8.3
+talosVersion: v1.8.4
 # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
-kubernetesVersion: v1.31.2
+kubernetesVersion: v1.32.0
 clusterName: "homelab"
 endpoint: https://10.252.252.200:6443
 clusterPodNets: ["10.244.0.0/16"]
