@@ -16,9 +16,9 @@ includes:
   flux: .taskfiles/flux.yaml
 tasks:
   default:
-    desc: Run the default task
+    silent: true
     cmds:
-      - echo "Welcome to the Taskfile setup!"
+      - task -l
   init:
     desc: Install dependencies and setup environment
     cmds:

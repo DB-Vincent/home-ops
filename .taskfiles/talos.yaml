@@ -10,7 +10,7 @@ vars:
 env:
   TALOSCONFIG: "{{.TALOSCONFIG}}"
 tasks:
-  bootstrap:
+  setup:
     desc: Bootstrap the Talos cluster
     cmds:
       - task: generate
@@ -33,9 +33,9 @@ tasks:
     desc: Apply Talos node configs
     cmds:
       - talhelper gencommand apply --config-file {{.TALHELPER_CONFIG_FILE}} --out-dir {{.CLUSTERCONFIG_DIR}} --extra-flags="--insecure" | bash
-      #    preconditions:
-      #      - msg: Missing talhelper config file
-      #        sh: test -f {{.TALHELPER_CONFIG_FILE}}
+    preconditions:
+      - msg: Missing talhelper config file
+        sh: test -f {{.TALHELPER_CONFIG_FILE}}
   fetch-kubeconfig:
     desc: Fetch kubeconfig from the cluster
     cmds:
