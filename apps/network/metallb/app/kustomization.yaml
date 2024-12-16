@@ -3,9 +3,5 @@ kind: Kustomization
 namespace: network
 resources:
   - ./helmrelease.yaml
-configMapGenerator:
-  - name: ingress-nginx-helm-values
-    files:
-      - values.yaml=./helm-values.yaml
 generatorOptions:
   disableNameSuffixHash: true
