@@ -28,4 +28,12 @@ tasks:
         else
           echo "Age-Keygen is already installed."
         fi
+      - |
+        # Install YQ
+        if ! command -v yq &>/dev/null; then
+          echo "Installing yq..."
+          brew install yq || (curl -sSL https://github.com/mikefarah/yq/releases/download/v4.44.6/yq_linux_amd64.tar.gz  | tar -xzvf - yq && mv yq /usr/local/bin/)
+        else
+          echo "yq is already installed."
+        fi
     silent: true
