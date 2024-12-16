@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
   - spegel.yaml
   - ingress-nginx.yaml
+  - metallb.yaml
