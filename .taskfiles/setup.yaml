@@ -36,4 +36,13 @@ tasks:
         else
           echo "yq is already installed."
         fi
+
+  cleanup:
+    desc: "Remove sensitive files and reset SOPS config"
+    cmds:
+      - rm -f ./cluster/bootstrap/talos/configs/talsecret.sops.yaml
+      - rm -f ./cluster/bootstrap/flux/github-deploy-key.sops.yaml
+      - rm -f ./cluster/flux/vars/cluster-secrets.sops.yaml
+      - rm -f ./.sops.yaml
+      - cp ./.sops.example.yaml ./.sops.yaml
     silent: true
