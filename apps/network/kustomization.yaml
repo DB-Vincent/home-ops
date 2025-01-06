@@ -5,3 +5,4 @@ resources:
   # Actual apps
   - ./ingress-nginx
   - ./metallb
+  - ./cilium
