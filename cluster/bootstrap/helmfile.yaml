@@ -1,0 +1,27 @@
+---
+helmDefaults:
+  wait: true
+  waitForJobs: true
+  timeout: 600
+  recreatePods: true
+  force: true
+
+repositories:
+  - name: cilium
+    url: https://helm.cilium.io
+
+releases:
+  - name: cilium
+    namespace: kube-system
+    chart: cilium/cilium
+    version: 1.16.5
+    values:
+      - ../../apps/network/cilium/app/helm-values.yaml
+  - name: spegel
+    namespace: kube-system
+    chart: oci://ghcr.io/spegel-org/helm-charts/spegel
+    version: v0.0.27
+    values:
+      - ../../apps/kube-system/spegel/app/helm-values.yaml
+    needs:
+      - kube-system/cilium

@@ -2,7 +2,7 @@
 version: "3"
 tasks:
   init:
-    desc: "Install SOPS, Talhelper, and Age-Keygen"
+    desc: "Install SOPS, Talhelper, Age-Keygen, and Helmfile"
     cmds:
       - |
         # Install SOPS
@@ -35,6 +35,14 @@ tasks:
           brew install yq || (curl -sSL https://github.com/mikefarah/yq/releases/download/v4.44.6/yq_linux_amd64.tar.gz  | tar -xzvf - yq && mv yq /usr/local/bin/)
         else
           echo "yq is already installed."
+        fi
+      - |
+        # Install Helmfile
+        if ! command -v helmfile &>/dev/null; then
+          echo "Installing Helmfile..."
+          brew install helmfile || (curl -sSL https://github.com/helmfile/helmfile/releases/download/v0.158.1/helmfile_0.158.1_linux_amd64.tar.gz | tar -xzvf - helmfile && mv helmfile /usr/local/bin/)
+        else
+          echo "Helmfile is already installed."
         fi
 
   cleanup:
