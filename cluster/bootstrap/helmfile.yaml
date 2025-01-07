@@ -12,7 +12,7 @@ repositories:
 
 releases:
   - name: cilium
-    namespace: kube-system
+    namespace: network
     chart: cilium/cilium
     version: 1.16.5
     values:
@@ -24,4 +24,4 @@ releases:
     values:
       - ../../apps/kube-system/spegel/app/helm-values.yaml
     needs:
-      - kube-system/cilium
+      - network/cilium

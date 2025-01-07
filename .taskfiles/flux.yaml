@@ -8,8 +8,13 @@ tasks:
         cluster: Cluster to run command against (required)
     prompt: Bootstrap Flux into the '{{.cluster}}' cluster ... continue?
     cmds:
+      # Install network
+      - kubectl --context {{.cluster}} --kubeconfig {{.KUBECONFIG_FILE}} create namespace network
+      - kubectl --context {{.cluster}} --kubeconfig {{.KUBECONFIG_FILE}} label namespace network pod-security.kubernetes.io/enforce=privileged
+      - kubectl --context {{.cluster}} --kubeconfig {{.KUBECONFIG_FILE}} label namespace network pod-security.kubernetes.io/enforce-version=latest
+      - helmfile --file {{.KUBERNETES_DIR}}/bootstrap/helmfile.yaml apply --skip-diff-on-install --suppress-diff --kubeconfig {{.KUBECONFIG_FILE}} --kube-context {{.cluster}}
+      # Install Flux
       - kubectl --context {{.cluster}} apply --kubeconfig {{.KUBECONFIG_FILE}} --server-side --kustomize {{.KUBERNETES_DIR}}/bootstrap/flux
-      - helmfile --file {{.KUBERNETES_DIR}}/bootstrap/helmfile.yaml apply --skip-diff-on-install --suppress-diff --kubeconfig {{.KUBECONFIG_FILE}} --kube-context {{.cluster}} 
       - cat {{.AGE_FILE}} | kubectl -n flux-system create --kubeconfig {{.KUBECONFIG_FILE}} secret generic sops-age --from-file=age.agekey=/dev/stdin
       - sops --decrypt {{.KUBERNETES_DIR}}/flux/vars/cluster-secrets.sops.yaml | kubectl apply --kubeconfig {{.KUBECONFIG_FILE}} --server-side --filename -
       - kubectl --context {{.cluster}} apply --kubeconfig {{.KUBECONFIG_FILE}} --server-side --filename {{.KUBERNETES_DIR}}/flux/vars/cluster-settings.yaml
