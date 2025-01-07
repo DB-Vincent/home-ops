@@ -4,5 +4,4 @@ resources:
   - ./namespace.yaml
   # Actual apps
   - ./ingress-nginx
-  - ./metallb
   - ./cilium
