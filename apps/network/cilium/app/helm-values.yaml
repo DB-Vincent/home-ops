@@ -1,6 +1,6 @@
 ipam:
   mode: kubernetes
-kubeProxyReplacement: false
+kubeProxyReplacement: true
 securityContext:
   capabilities:
     ciliumAgent:
@@ -23,3 +23,12 @@ cgroup:
   autoMount:
     enabled: false
   hostRoot: /sys/fs/cgroup
+k8sServiceHost: localhost
+k8sServicePort: 7445
+l2announcements:
+  enabled: true
+externalIPs:
+  enabled: true
+k8sClientRateLimit:
+  qps: 50
+  burst: 100
