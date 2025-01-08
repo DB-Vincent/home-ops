@@ -5,3 +5,4 @@ resources:
   - spegel.yaml
   - ingress-nginx.yaml
   - cilium.yaml
+  - openebs.yaml
