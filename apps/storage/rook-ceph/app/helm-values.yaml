@@ -1,3 +1,4 @@
+operatorNamespace: storage
 cephClusterSpec:
   resources:
     mgr:
