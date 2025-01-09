@@ -3,5 +3,4 @@ kind: Kustomization
 resources:
   - ./namespace.yaml
   # Actual apps
-  # - ./ingress-nginx
-  - ./cilium
+  # - ./openebs
