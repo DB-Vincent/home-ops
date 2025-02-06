@@ -6,3 +6,4 @@ resources:
   - ingress-nginx.yaml
   - cilium.yaml
   - rook.yaml
+  - kubernetes-dashboard.yaml
