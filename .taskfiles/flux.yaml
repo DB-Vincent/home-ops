@@ -48,3 +48,11 @@ tasks:
     preconditions:
       - msg: Missing kubeconfig
         sh: test -f {{.KUBECONFIG_FILE}}
+  create-new-app:
+    desc: Copy template to Flux directory to set up new app 
+    cmds:
+      - cp -r .taskfiles/templates/app apps/{{.namespace}}/{{.app}}
+      - find apps/{{.namespace}}/{{.app}} -type f -exec sed -i 's/<APP_NAME>/{{.app}}/g' {} +
+      - find apps/{{.namespace}}/{{.app}} -type f -exec sed -i 's/<NS_NAME>/{{.namespace}}/g' {} +
+    requires:
+      vars: ["app", "namespace"]
