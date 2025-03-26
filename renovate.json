@@ -5,28 +5,41 @@
   ],
   "packageRules": [
     {
-      "matchPaths": ["apps/**/app/helmrelease.yaml"],
-      "matchPackagePatterns": ["^.*$"],
+      "matchFileNames": [
+        "apps/**/app/helmrelease.yaml"
+      ],
       "enabled": true,
       "groupName": "helm-releases",
       "groupSlug": "helm-releases",
-      "schedule": ["at any time"],
-      "labels": ["helm", "dependencies"],
+      "schedule": [
+        "at any time"
+      ],
+      "labels": [
+        "helm",
+        "dependencies"
+      ],
       "prHourlyLimit": 4,
       "prConcurrentLimit": 16,
       "rangeStrategy": "pin",
       "separateMajorMinor": true,
       "separateMultipleMajor": true,
-      "semanticCommits": "enabled"
+      "semanticCommits": "enabled",
+      "matchPackageNames": [
+        "/^.*$/"
+      ]
     }
   ],
-  "postUpdateOptions": ["gomodTidy"],
+  "postUpdateOptions": [
+    "gomodTidy"
+  ],
   "ignoreDeps": [],
   "ignorePaths": [],
   "prHourlyLimit": 4,
   "prConcurrentLimit": 16,
-  "schedule": ["at any time"],
+  "schedule": [
+    "at any time"
+  ],
   "semanticCommits": "enabled",
-  "stabilityDays": 3,
+  "minimumReleaseAge": "3 days",
   "timezone": "UTC"
 }
