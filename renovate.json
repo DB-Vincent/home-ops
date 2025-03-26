@@ -1,0 +1,34 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base"
+  ],
+  "packageRules": [
+    {
+      "matchDatasources": ["helm"],
+      "matchUpdateTypes": ["major", "minor", "patch"],
+      "groupName": "helm dependencies",
+      "groupSlug": "helm",
+      "labels": ["dependencies", "helm", "flux"]
+    }
+  ],
+  "helm-values": {
+    "fileMatch": ["\\.yaml$"]
+  },
+  "postUpdateOptions": ["gomodTidy"],
+  "schedule": ["every weekend"],
+  "labels": ["dependencies", "flux"],
+  "prHourlyLimit": 4,
+  "prConcurrentLimit": 16,
+  "rangeStrategy": "pin",
+  "semanticCommits": "enabled",
+  "stabilityDays": 3,
+  "vulnerabilityAlerts": {
+    "enabled": true
+  },
+  "commitMessagePrefix": "chore(deps):",
+  "separateMajorMinor": true,
+  "separateMultipleMajor": true,
+  "ignoreDeps": ["fluxcd/flux2"],
+  "ignorePaths": ["cluster/bootstrap/**"]
+} 

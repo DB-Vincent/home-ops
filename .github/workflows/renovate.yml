@@ -1,0 +1,15 @@
+name: Renovate
+on:
+  schedule:
+    - cron: '0 0 * * 0'  # Run weekly on Sunday at midnight
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+  renovate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Self-hosted Renovate
+        uses: renovatebot/github-action@v40.0.0
+        with:
+          configurationFile: renovate.json
+          token: ${{ secrets.GITHUB_TOKEN }} 
