@@ -23,7 +23,6 @@
   "postUpdateOptions": ["gomodTidy"],
   "ignoreDeps": [],
   "ignorePaths": [],
-  "platform": "github",
   "prHourlyLimit": 4,
   "prConcurrentLimit": 16,
   "schedule": ["at any time"],
