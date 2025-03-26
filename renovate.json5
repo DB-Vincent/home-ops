@@ -3,45 +3,10 @@
   "extends": [
     "config:recommended"
   ],
-  "packageRules": [
-    {
-      "matchFileNames": [
-        "apps/**/app/helmrelease.yaml"
-      ],
-      "enabled": true,
-      "groupName": "helm-releases",
-      "groupSlug": "helm-releases",
-      "schedule": [
-        "at any time"
-      ],
-      "labels": [
-        "helm",
-        "dependencies"
-      ],
-      "prHourlyLimit": 4,
-      "prConcurrentLimit": 16,
-      "rangeStrategy": "pin",
-      "separateMajorMinor": true,
-      "separateMultipleMajor": true,
-      "semanticCommits": "enabled",
-      "extractVersion": "^v?(?<version>\\d+\\.\\d+\\.\\d+)$",
-      "matchPackageNames": [
-        "/^.*$/"
-      ]
-    }
-  ],
-  "postUpdateOptions": [
-    "gomodTidy"
-  ],
-  "ignoreDeps": [],
-  "ignorePaths": [],
-  "prHourlyLimit": 4,
-  "prConcurrentLimit": 16,
-  "schedule": [
-    "at any time"
-  ],
-  "semanticCommits": "enabled",
-  "stabilityDays": 3,
-  "timezone": "UTC",
-  "minimumReleaseAge": "3 days",
+  "flux": {
+    "fileMatch": [
+      "(?:^|/)gotk-components\\.ya?ml$",
+      "\\.yaml$"
+    ]
+  }
 }
