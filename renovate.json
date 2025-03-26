@@ -24,6 +24,8 @@
       "separateMajorMinor": true,
       "separateMultipleMajor": true,
       "semanticCommits": "enabled",
+      "datasources": ["helm"],
+      "extractVersion": "^v?(?<version>\\d+\\.\\d+\\.\\d+)$",
       "matchPackageNames": [
         "/^.*$/"
       ]
@@ -40,6 +42,8 @@
     "at any time"
   ],
   "semanticCommits": "enabled",
+  "stabilityDays": 3,
+  "timezone": "UTC",
+  "datasources": ["helm"],
   "minimumReleaseAge": "3 days",
-  "timezone": "UTC"
 }
