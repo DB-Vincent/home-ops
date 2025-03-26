@@ -2,5 +2,32 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended"
-  ]
+  ],
+  "packageRules": [
+    {
+      "matchPaths": ["apps/**/app/helmrelease.yaml"],
+      "matchPackagePatterns": ["^.*$"],
+      "enabled": true,
+      "groupName": "helm-releases",
+      "groupSlug": "helm-releases",
+      "schedule": ["at any time"],
+      "labels": ["helm", "dependencies"],
+      "prHourlyLimit": 4,
+      "prConcurrentLimit": 16,
+      "rangeStrategy": "pin",
+      "separateMajorMinor": true,
+      "separateMultipleMajor": true,
+      "semanticCommits": "enabled"
+    }
+  ],
+  "postUpdateOptions": ["gomodTidy"],
+  "ignoreDeps": [],
+  "ignorePaths": [],
+  "platform": "github",
+  "prHourlyLimit": 4,
+  "prConcurrentLimit": 16,
+  "schedule": ["at any time"],
+  "semanticCommits": "enabled",
+  "stabilityDays": 3,
+  "timezone": "UTC"
 }
