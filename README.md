@@ -107,6 +107,10 @@ kube-system   kube-proxy-tkc4f                     1/1     Running   0          
 kube-system   kube-scheduler-control-01            0/1     Pending   0          4s
 ```
 
+Adjust Github repository link in `cluster/flux/config/cluster.yaml` to match your repository.
+
+**Important:** commit & push changes to git repository before deploying Flux.
+
 Deploy Flux:
 
 ```shell
