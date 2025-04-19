@@ -12,7 +12,8 @@ tasks:
       - kubectl --context {{.cluster}} --kubeconfig {{.KUBECONFIG_FILE}} create namespace network
       - kubectl --context {{.cluster}} --kubeconfig {{.KUBECONFIG_FILE}} label namespace network pod-security.kubernetes.io/enforce=privileged
       - kubectl --context {{.cluster}} --kubeconfig {{.KUBECONFIG_FILE}} label namespace network pod-security.kubernetes.io/enforce-version=latest
-      - helmfile --file {{.KUBERNETES_DIR}}/bootstrap/helmfile.yaml apply --skip-diff-on-install --suppress-diff --kubeconfig {{.KUBECONFIG_FILE}} --kube-context {{.cluster}}
+      - if ! helm repo list | grep -q "cilium"; then helm repo add cilium https://helm.cilium.io/; fihelm repo add cilium https://helm.cilium.io/; fi
+      - helm install cilium cilium/cilium --version 1.17.3 --namespace network --set ipam.mode=kubernetes --set kubeProxyReplacement=true --set securityContext.capabilities.ciliumAgent="{CHOWN,KILL,NET_ADMIN,NET_RAW,IPC_LOCK,SYS_ADMIN,SYS_RESOURCE,DAC_OVERRIDE,FOWNER,SETGID,SETUID}" --set securityContext.capabilities.cleanCiliumState="{NET_ADMIN,SYS_ADMIN,SYS_RESOURCE}" --set cgroup.autoMount.enabled=false --set cgroup.hostRoot=/sys/fs/cgroup --set k8sServiceHost=localhost --set k8sServicePort=7445 --wait
       # Install Flux
       - kubectl --context {{.cluster}} apply --kubeconfig {{.KUBECONFIG_FILE}} --server-side --kustomize {{.KUBERNETES_DIR}}/bootstrap/flux
       - cat {{.AGE_FILE}} | kubectl -n flux-system create --kubeconfig {{.KUBECONFIG_FILE}} secret generic sops-age --from-file=age.agekey=/dev/stdin
