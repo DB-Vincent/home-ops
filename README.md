@@ -49,12 +49,19 @@ metadata:
 type: Opaque
 data:
   identity: YOUR_BASE64_ENCODED_PRIVATE_KEY_USED_TO_PULL_SOURCE_CODE
+  known_hosts: A_BASE64_ENCODED_KNOWN_HOSTS_ENTRY
 ```
 
 The base64 encoded private key can be generated with the following command:
 
 ```shell
 base64 -w 0 <private_key_path>
+```
+
+The known hosts entry can be generated with the following command:
+
+```shell
+ssh-keyscan github.com | base64 -w 0
 ```
 
 Now, encrypt all your `*.sops.yaml` files to avoid leaking any sensitive information when pushing to your Git repository:
